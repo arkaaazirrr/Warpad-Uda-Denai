@@ -1,0 +1,1522 @@
+<!DOCTYPE html>
+<html lang="id">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Rumah Masakan Padang</title>
+
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+    <!-- ================= NAVBAR ================= -->
+
+    <nav>
+        <div class="logo">
+            <!-- Tambahkan tag gambar logo di sini -->
+            <img src="LOGO UMKM.png" alt="Logo UDA DENAI" class="logo-img">
+            <span>Rumah Makan UDA DENAI</span>
+        </div>
+
+        <button class="menu-toggle" onclick="toggleMenu()" aria-label="Buka menu">
+            ☰
+        </button>
+
+        <ul id="navMenu">
+            <li><a href="#home">Home</a></li>
+            <li><a href="#produk">Menu</a></li>
+            <li><a href="#tentang">Tentang</a></li>
+            <li><a href="#produk">Pricelist</a></li>
+            <li><a href="#galeri">Galeri</a></li>
+            <li><a href="#sejarah">Sejarah</a></li>
+            <li><a href="#swot">SWOT</a></li>
+            <li><a href="#sop">SOP</a></li>
+            <li><a href="#lokasi">Lokasi</a></li>
+            <li><a href="#" onclick="openAdmin('history'); return false;">Riwayat</a></li>
+        </ul>
+</nav>
+
+
+    <!-- ================= HERO ================= -->
+
+    <section class="hero" id="home">
+
+        <div class="hero-text">
+
+            <h1>
+                Selamat Datang di Rumah Masakan Padang
+                <span>UDA DENAI</span>
+            </h1>
+
+            <p>
+                Menyajikan Hidangan Padang Kaya Rempah dan Berkualitas Terbaik 
+                Tanpa Membawa Beban di Kantong.
+            </p>
+
+            <a href="#produk" class="btn">
+                Menu
+            </a>
+
+        </div>
+
+        <img
+            src="Bann.jpeg"
+            alt="Produk Usaha">
+
+    </section>
+
+
+    <!-- ================= TENTANG ================= -->
+
+    <section id="tentang">
+
+        <div class="section-title">
+
+            <h2>Tentang Usaha</h2>
+
+            <p>
+                Mengenal lebih dekat Rumah Masak Ini
+            </p>
+
+        </div>
+
+
+        <div class="about">
+
+            <img
+                src="Bann.jpeg"
+                alt="Tentang Usaha">
+
+
+            <div class="about-text">
+
+                <h2>Rumah Masak Uda Denai</h2>
+
+                <p>
+                    Rumah Masak ini adalah usaha kuliner yang menyajikan 
+                    hidangan khas Minang dengan kualitas rasa terbaik 
+                    dan harga yang selalu terjangkau
+                </p>
+
+                <br>
+
+                <p>
+                    Di Rumah Masak Padang ini, kualitas produk, kebersihan, 
+                    pelayanan yang ramah, dan kepuasan pelanggan adalah 
+                    prioritas utama dalam setiap hidangan yang disajikan.
+                </p>
+
+            </div>
+
+        </div>
+
+    </section>
+
+
+    <!-- ================= PRICE LIST ================= -->
+
+    <section id="produk">
+
+        <div class="section-title">
+
+            <h2>Menu & Pricelist</h2>
+
+            <p>
+                Pilihan Menu yang tersedia
+            </p>
+
+        </div>
+
+
+        <!-- HANYA 3 PRODUK YANG TAMPIL -->
+
+        <div class="products">
+
+
+            <!-- PRODUK 1 -->
+
+            <div
+                class="product"
+                onclick="openDetail(
+                    'Nasi Rendang',
+                    'Pedas & Gurih',
+                    'Nasi rendang dengan daging empuk dan bumbu kaya rempah. Pilihan pas untuk makan kenyang dan lezat di setiap kesempatan.',
+                    'Rp13.000',
+                    'rendang.jpg'
+                )">
+
+                <img
+                    src="rendang.jpg"
+                    alt="Nasi Rendang">
+
+                <div class="product-info">
+
+                    <h3>
+                        Nasi Rendang
+                    </h3>
+
+                    <p>
+                        Pedas & Gurih
+                    </p>
+
+                    <br>
+
+                    <div class="price">
+                        Rp13.000
+                    </div>
+
+                </div>
+
+            </div>
+
+
+            <!-- PRODUK 2 -->
+
+            <div
+                class="product"
+                onclick="openDetail(
+                    'Nasi Ayam Gulai',
+                    'Gurih',
+                    'Nasi hangat dengan ayam yang disajikan bersama kuah gulai yang gurih, lezat, dan kaya rempah.',
+                    'Rp10.000',
+                    'ayamgulai.jpg'
+                )">
+
+                <img
+                    src="ayamgulai.jpg"
+                    alt="Nasi Ayam Gulai">
+
+                <div class="product-info">
+
+                    <h3>
+                        Nasi Ayam Gulai
+                    </h3>
+
+                    <p>
+                        Gurih
+                    </p>
+
+                    <br>
+
+                    <div class="price">
+                        Rp10.000
+                    </div>
+
+                </div>
+
+            </div>
+
+
+            <!-- PRODUK 3 -->
+
+            <div
+                class="product"
+                onclick="openDetail(
+                    'Nasi Ayam Bakar',
+                    'Gurih',
+                    'Nasi hangat dengan ayam bakar yang gurih dan lezat, disajikan dengan bumbu khas yang menggugah selera.',
+                    'Rp10.000',
+                    'ayam bakar.jpg'
+                )">
+
+                <img
+                    src="ayam bakar.jpg"
+                    alt="Nasi Ayam Bakar">
+
+                <div class="product-info">
+
+                    <h3>
+                        Nasi Ayam Bakar
+                    </h3>
+
+                    <p>
+                        Gurih
+                    </p>
+
+                    <br>
+
+                    <div class="price">
+                        Rp10.000
+                    </div>
+
+                </div>
+
+            </div>
+
+
+        </div>
+
+
+        <!-- TOMBOL SEMUA PRICELIST -->
+
+        <div class="all-products-button">
+
+            <button onclick="openAllProducts()">
+
+                Lihat Semua Menu
+
+            </button>
+
+        </div>
+
+    </section>
+
+
+    <!-- ================= POPUP SEMUA PRICELIST ================= -->
+
+    <div
+        class="all-products-modal"
+        id="allProductsModal"
+        onclick="closeAllProducts(event)">
+
+
+        <div
+            class="all-products-content"
+            onclick="event.stopPropagation()">
+
+
+            <!-- TOMBOL TUTUP -->
+
+            <span
+                class="all-products-close"
+                onclick="closeAllProducts()">
+
+                &times;
+
+            </span>
+
+
+            <div class="section-title">
+
+                <h2>
+                    Semua Menu & Pricelist
+                </h2>
+
+                <p>
+                    Pilih menu untuk melihat detail
+                </p>
+
+            </div>
+
+
+            <!-- 14 PRODUK -->
+
+            <div class="all-products-grid">
+
+
+                <!-- 1 -->
+
+                <div
+                    class="mini-product"
+                    onclick="openDetail(
+                        'Nasi Rendang',
+                        'Pedas & Gurih',
+                        'Nasi rendang dengan daging empuk dan bumbu kaya rempah. Pilihan pas untuk makan kenyang dan lezat di setiap kesempatan.',
+                        'Rp13.000',
+                        'rendang.jpg'
+                    )">
+
+                    <img
+                        src="rendang.jpg"
+                        alt="Nasi Rendang">
+
+                    <h3>Nasi Rendang</h3>
+
+                    <p>Pedas & Gurih</p>
+
+                    <strong>Rp13.000</strong>
+
+                </div>
+
+
+                <!-- 2 -->
+
+                <div
+                    class="mini-product"
+                    onclick="openDetail(
+                        'Nasi Ayam Gulai',
+                        'Gurih',
+                        'Nasi hangat dengan ayam yang disajikan bersama kuah gulai yang gurih, lezat, dan kaya rempah.',
+                        'Rp10.000',
+                        'ayamgulai.jpg'
+                    )">
+
+                    <img
+                        src="ayamgulai.jpg"
+                        alt="Nasi Ayam Gulai">
+
+                    <h3>Nasi Ayam Gulai</h3>
+
+                    <p>Gurih</p>
+
+                    <strong>Rp10.000</strong>
+
+                </div>
+
+
+                <!-- 3 -->
+
+                <div
+                    class="mini-product"
+                    onclick="openDetail(
+                        'Nasi Ayam Bakar',
+                        'Gurih',
+                        'Nasi hangat dengan ayam bakar yang gurih dan lezat, disajikan dengan bumbu khas yang menggugah selera.',
+                        'Rp10.000',
+                        'ayam bakar.jpg'
+                    )">
+
+                    <img
+                        src="ayam bakar.jpg"
+                        alt="Nasi Ayam Bakar">
+
+                    <h3>Nasi Ayam Bakar</h3>
+
+                    <p>Gurih</p>
+
+                    <strong>Rp10.000</strong>
+
+                </div>
+
+
+                <!-- 4 -->
+
+                <div
+                    class="mini-product"
+                    onclick="openDetail(
+                        'Nasi Ayam Cabe Ijo',
+                        'Pedas & Gurih',
+                        'Nasi ayam goreng cabe ijo dengan daging ayam gurih renyah dan balutan sambal hijau yang segar. Cocok untuk santap siang atau malam yang menggugah selera.',
+                        'Rp10.000',
+                        'ayamcabeijo.jpg'
+                    )">
+
+                    <img
+                        src="ayamcabeijo.jpg"
+                        alt="Nasi Ayam Cabe Ijo">
+
+                    <h3>Nasi Ayam Cabe Ijo</h3>
+
+                    <p>Gurih & Pedas</p>
+
+                    <strong>Rp10.000</strong>
+
+                </div>
+
+
+                <!-- 5 -->
+
+                <div
+                    class="mini-product"
+                    onclick="openDetail(
+                        'Nasi Ayam Cabe Merah',
+                        'Pedas',
+                        'Nasi ayam goreng cabe merah menyajikan kombinasi ayam goreng gurih yang renyah dengan balutan sambal cabe merah yang mantap dan kaya rempah.',
+                        'Rp10.000',
+                        'ayamcabemerah.jpeg'
+                    )">
+
+                    <img
+                        src="ayamcabemerah.jpeg"
+                        alt="Nasi Ayam Cabe Merah">
+
+                    <h3>Nasi Ayam Cabe Merah</h3>
+
+                    <p>Pedas</p>
+
+                    <strong>Rp10.000</strong>
+
+                </div>
+
+
+                <!-- 6 -->
+
+                <div
+                    class="mini-product"
+                    onclick="openDetail(
+                        'Nasi Bawal',
+                        'Gurih',
+                        'Nasi bawal menyajikan daging ikan bawal goreng yang gurih, renyah di bagian luar, dan lembut di dalam, Dipadukan dengan nasi hangat.',
+                        'Rp10.000',
+                        'bawal.jpg'
+                    )">
+
+                    <img
+                        src="bawal.jpg"
+                        alt="Nasi Bawal">
+
+                    <h3>Nasi Bawal</h3>
+
+                    <p>Gurih</p>
+
+                    <strong>Rp10.000</strong>
+
+                </div>
+
+
+                <!-- 7 -->
+
+                <div
+                    class="mini-product"
+                    onclick="openDetail(
+                        'Nasi Mujair',
+                        'Gurih',
+                        'Nasi mujair menyajikan ikan mujair goreng renyah dengan rasa gurih alami yang meresap hingga ke tulang.',
+                        'Rp10.000',
+                        'mujaer.jpg'
+                    )">
+
+                    <img
+                        src="mujaer.jpg"
+                        alt="Nasi Mujair">
+
+                    <h3>Nasi Mujair</h3>
+
+                    <p>Gurih</p>
+
+                    <strong>Rp10.000</strong>
+
+                </div>
+
+
+                <!-- 8 -->
+
+                <div
+                    class="mini-product"
+                    onclick="openDetail(
+                        'Nasi Tongkol',
+                        'Gurih',
+                        'Nasi tongkol menyajikan olahan ikan tongkol dengan tekstur daging yang padat dan gurih.',
+                        'Rp10.000',
+                        'tongkol.jpg'
+                    )">
+
+                    <img
+                        src="tongkol.jpg"
+                        alt="Nasi Tongkol">
+
+                    <h3>Nasi Tongkol</h3>
+
+                    <p>Gurih</p>
+
+                    <strong>Rp10.000</strong>
+
+                </div>
+
+
+                <!-- 9 -->
+
+                <div
+                    class="mini-product"
+                    onclick="openDetail(
+                        'Nasi Gembung',
+                        'Gurih',
+                        'Nasi gembung menyajikan ikan kembung goreng yang gurih renyah dengan daging yang tebal dan lembut.',
+                        'Rp10.000',
+                        'gembung.jpg'
+                    )">
+
+                    <img
+                        src="gembung.jpg"
+                        alt="Nasi Gembung">
+
+                    <h3>Nasi Gembung</h3>
+
+                    <p>Gurih</p>
+
+                    <strong>Rp10.000</strong>
+
+                </div>
+
+
+                <!-- 10 -->
+
+                <div
+                    class="mini-product"
+                    onclick="openDetail(
+                        'Nasi Lele',
+                        'Gurih',
+                        'Nasi lele menyajikan ikan lele goreng yang garing renyah di luar dan tetap lembut di dalam. Dibalut bumbu rempah kuning yang meresap sempurna.',
+                        'Rp10.000',
+                        'lele.jpg'
+                    )">
+
+                    <img
+                        src="lele.jpg"
+                        alt="Nasi Lele">
+
+                    <h3>Nasi Lele</h3>
+
+                    <p>Gurih</p>
+
+                    <strong>Rp10.000</strong>
+
+                </div>
+
+
+                <!-- 11 -->
+
+                <div
+                    class="mini-product"
+                    onclick="openDetail(
+                        'Nasi Kikil',
+                        'Gurih',
+                        'Nasi kikil menyajikan kenyalnya olahan kikil sapi yang lembut dan empuk, disiram kuah gulai gurih kaya bumbu rempah khas Minang.',
+                        'Rp10.000',
+                        'kikil.jpeg'
+                    )">
+
+                    <img
+                        src="kikil.jpeg"
+                        alt="Nasi Kikil">
+
+                    <h3>Nasi Kikil</h3>
+
+                    <p>Gurih</p>
+
+                    <strong>Rp10.000</strong>
+
+                </div>
+
+
+                <!-- 12 -->
+
+                <div
+                    class="mini-product"
+                    onclick="openDetail(
+                        'Nasi Telur Dadar',
+                        'Gurih',
+                        'Nasi telur dadar menyajikan telur dadar khas Padang yang tebal, gurih, dan renyah di pinggirannya namun tetap lembut di dalam.',
+                        'Rp10.000',
+                        'telurdadar.jpg'
+                    )">
+
+                    <img
+                        src="telurdadar.jpg"
+                        alt="Nasi Telur Dadar">
+
+                    <h3>Nasi Telur Dadar</h3>
+
+                    <p>Gurih</p>
+
+                    <strong>Rp10.000</strong>
+
+                </div>
+
+
+                <!-- 13 -->
+
+                <div
+                    class="mini-product"
+                    onclick="openDetail(
+                        'Nasi Telur Bulat',
+                        'Gurih & Pedas',
+                        'Nasi telur bulat menyajikan telur rebus yang digoreng hingga berkulit renyah di luar, lalu dibalut siraman kuah gulai atau bumbu balado yang meresap sempurna.',
+                        'Rp10.000',
+                        'telurbulet.jpg'
+                    )">
+
+                    <img
+                        src="telurbulet.jpg"
+                        alt="Nasi Telur Bulat">
+
+                    <h3>Nasi Telur Bulat</h3>
+
+                    <p>Gurih & Pedas</p>
+
+                    <strong>Rp10.000</strong>
+
+                </div>
+
+
+                <!-- 14 -->
+
+                <div
+                    class="mini-product"
+                    onclick="openDetail(
+                        'Nasi Ati Ampela',
+                        'Gurih',
+                        'Nasi ati ampela menyajikan kombinasi ati yang lembut dan ampela yang kenyal gurih.',
+                        'Rp10.000',
+                        'atiampela.jpg'
+                    )">
+
+                    <img
+                        src="atiampela.jpg"
+                        alt="Nasi Ati Ampela">
+
+                    <h3>Nasi Ati Ampela</h3>
+
+                    <p>Gurih</p>
+
+                    <strong>Rp10.000</strong>
+
+                </div>
+
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <!-- ================= DETAIL PRODUK ================= -->
+
+    <div
+        class="product-detail-modal"
+        id="productDetailModal"
+        onclick="closeDetail(event)">
+
+
+        <div
+            class="product-detail-content"
+            onclick="event.stopPropagation()">
+
+
+            <span
+                class="detail-close"
+                onclick="closeDetail()">
+
+                &times;
+
+            </span>
+
+
+            <img
+                id="detailImage"
+                src=""
+                alt="Detail Produk">
+
+
+            <div class="detail-info">
+
+                <span
+                    id="detailCategory"
+                    class="detail-category">
+                </span>
+
+
+                <h2 id="detailTitle">
+                </h2>
+
+
+                <p id="detailDescription">
+                </p>
+
+
+                <div
+                    class="detail-price"
+                    id="detailPrice">
+                </div>
+
+
+                <button
+                    type="button"
+                    class="btn-primary detail-add-btn"
+                    id="detailAddBtn"
+                    onclick="addCurrentDetailToCart()">
+
+                    + Tambah ke Keranjang
+
+                </button>
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <!-- ================= GALERI ================= -->
+
+    <section id="galeri">
+
+        <div class="section-title">
+
+            <h2>Galeri Foto</h2>
+
+            <p>
+                Beberapa foto tempat makan dan kegiatan usaha
+            </p>
+
+        </div>
+
+
+        <div class="gallery">
+
+            <img
+                src="1.jpeg"
+                alt="Galeri 1">
+
+            <img
+                src="2.jpeg"
+                alt="Galeri 2">
+
+            <img
+                src="Bann.jpeg"
+                alt="Galeri 3">
+
+            <img
+                src="c0b4af41-1bcb-47f2-8240-40740661b8d8.jpg"
+                alt="Galeri 4">
+
+            <img
+                src="Poster.jpeg"
+                alt="Galeri 5">
+
+            <img
+                src="pL.jpeg"
+                alt="Galeri 6">
+
+        </div>
+
+    </section>
+
+
+    <!-- ================= SEJARAH ================= -->
+
+    <section id="sejarah">
+
+        <div class="section-title">
+
+            <h2>Sejarah Usaha</h2>
+
+            <p>
+                Perjalanan usaha Rumah Makan UDA DENAI
+            </p>
+
+        </div>
+
+
+        <div class="history">
+
+            <p>
+                Usaha rumah makan padang ini milik seseorang Ibu bernama Ida, Ibu Ida sudah dijalankan 
+                sejak sekitar tahun 2018–2019 di lokasi yang sekarang. Namun, sebelum menempati lokasi 
+                tersebut, Ibu Ida sebenarnya sudah cukup lama menjalankan usaha yang sama dan beberapa 
+                kali berpindah tempat.
+            </p>
+
+            <br>
+
+            <p>
+                Usaha ini didirikan dan dikelola sendiri oleh Ibu Ida. Sejak awal berdiri, usaha Ibu Ida 
+                menjual berbagai macam nasi paket dan masakan Padang. Salah satu menu yang menjadi daya 
+                tarik utama bagi pelanggan adalah rendang. Usaha ini terus dijalankan 
+                hingga sekarang dan menjadi sumber penghasilan bagi Ibu Ida.
+                <br>
+                Dalam perjalanan usahanya, pendapatan yang diperoleh mengalami perubahan dari tahun ke tahun.
+                Menurut Ibu Ida, kondisi usaha pada tahun-tahun sebelumnya masih tergolong normal. Namun, pada 
+                tahun 2026, pendapatan mulai mengalami penurunan sejak adanya program Makan Bergizi Gratis (MBG). 
+                Adanya program tersebut membuat sebagian pembeli seperti anak sekolah sudah mendapatkan makanan, 
+                sehingga pembelian makanan di warung Ibu Ida menjadi berkurang.
+            </p>
+
+            <br>
+
+            <p>
+                Meskipun mengalami penurunan pendapatan, Ibu Ida tetap menjalankan usahanya dan berusaha 
+                mempertahankan rumah makan yang telah dijalankannya selama bertahun-tahun.
+            </p>
+
+            <br>
+
+            <h2>Modal awal usaha</h2>
+
+            <p>
+                Pada awal menjalankan usaha, Ibu Ida membutuhkan modal sekitar Rp25.000.000. Modal tersebut 
+                berasal dari bantuan saudara yang kemudian dikembalikan secara bertahap dengan cara dicicil.
+            </p>
+
+            <br>
+
+            <p>
+                Modal awal tersebut digunakan untuk memenuhi berbagai kebutuhan usaha. Sekitar Rp14.500.000 
+                digunakan untuk membayar kontrak tempat usaha selama satu tahun. Kemudian, sekitar Rp10.000.000 
+                digunakan untuk membeli perabotan dan perlengkapan yang diperlukan di rumah makan. Selain itu, sebagian 
+                modal juga digunakan untuk membeli bahan makanan dan kebutuhan awal lainnya.
+            </p>
+
+            <br>
+
+            <p>
+                Dengan modal sekitar Rp25.000.000 tersebut, Ibu Ida dapat memenuhi kebutuhan awal usaha 
+                hingga rumah makan siap beroperasi dan mulai melayani pelanggan.
+            </p>
+
+        </div>
+
+    </section>
+
+
+    <!-- ================= SWOT ================= -->
+
+    <section id="swot">
+
+        <div class="section-title">
+
+            <h2>SWOT</h2>
+
+            <p>
+                Analisis kondisi usaha
+            </p>
+
+        </div>
+
+
+        <div class="swot">
+
+            <div class="swot-box">
+
+                <h3>
+                    Strengths — Kekuatan
+                </h3>
+
+                <ul>
+                    <li>Pengalaman berjualan sudah cukup lama</li>
+                    <li>Harga makanan cukup terjangkau</li>
+                    <li>Memiliki menu favorit, terutama rendang</li>
+                    <li>Mudah dijangkau pelanggan</li>
+                </ul>
+
+            </div>
+
+
+            <div class="swot-box">
+
+                <h3>
+                    Weaknesses — Kelemahan
+                </h3>
+
+                <ul>
+                    <li>Penggunaan QRIS belum maksimal</li>
+                    <li>Masih lebih mengutamakan pembayaran tunai</li>
+                    <li>Pendapatan terkadang mengalami penurunan</li>
+                </ul>
+
+            </div>
+
+
+            <div class="swot-box">
+
+                <h3>
+                    Opportunities — Peluang
+                </h3>
+
+                <ul>
+                    <li>Memiliki pelanggan dari masyarakat sekitar</li>
+                    <li>Bisa menerima pesanan nasi bungkus dalam jumlah banyak</li>
+                    <li>Masih bisa mengembangkan pemasaran dan pembayaran digital</li>
+                </ul>
+
+            </div>
+
+
+            <div class="swot-box">
+
+                <h3>
+                    Threats — Ancaman
+                </h3>
+
+                <ul>
+                    <li>Program MBG mengurangi sebagian jumlah pembeli</li>
+                    <li>Pernah terjadi vandalisme/coretan pada tempat usaha</li>
+                    <li>Persaingan dengan warung makanan lain</li>
+                </ul>
+
+            </div>
+
+        </div>
+
+    </section>
+
+
+    <!-- ================= SOP ================= -->
+
+    <section id="sop">
+
+        <div class="section-title">
+
+            <h2>SOP Usaha</h2>
+
+            <p>
+                SOP Rumah Makan UDA DENAI
+            </p>
+
+        </div>
+
+
+        <div class="sop">
+
+            <ol>
+
+                <li>
+                    Menyiapkan produk sebelum jam jualan.
+                </li>
+
+                <li>
+                    Memastikan tempat dan peralatan dalam keadaan bersih.
+                </li>
+
+                <li>
+                    Memeriksa kualitas produk sebelum dijual.
+                </li>
+
+                <li>
+                    Melayani pelanggan dengan ramah dan sopan.
+                </li>
+
+                <li>
+                    Mencatat setiap transaksi penjualan.
+                </li>
+
+                <li>
+                    Menjaga kebersihan selama proses penjualan.
+                </li>
+
+                <li>
+                    Melakukan pengecekan stok setelah selesai berjualan.
+                </li>
+
+                <li>
+                    Membersihkan tempat jualan setelah kegiatan selesai.
+                </li>
+
+            </ol>
+
+        </div>
+
+    </section>
+
+
+    <!-- ================= LOKASI ================= -->
+
+    <section id="lokasi">
+
+        <div class="section-title">
+
+            <h2>Lokasi Rumah Makan UDA DENAI</h2>
+
+            <p>
+                Temukan lokasi Ruman Makan Ini
+            </p>
+
+        </div>
+
+
+        <div class="location">
+
+            <div class="location-info">
+
+                <h3>
+                    Alamat
+                </h3>
+
+                <p>
+                    Jl. Pancawarga III RT.1 RW.3<br>
+                    Cipinang Besar Sel. Kecamatan Jatinegara<br>
+                    Jakarta Timur, DKI Jakarta 13410
+                </p>
+
+                <br>
+
+                <!--<h3>
+                    Jam Operasional
+                </h3>
+
+                <p>
+                    Senin - Sabtu<br>
+                    08.00 - 17.00
+                </p> -->
+
+            </div>
+
+
+            <div class="map">
+    <iframe src="https://www.google.com/maps/embed?pb=!1m10!1m8!1m3!1d247.8890726794634!2d106.88083773314881!3d-6.234022231385246!3m2!1i1024!2i768!4f13.1!5e0!3m2!1sid!2sid!4v1791265974892!5m2!1sid!2sid" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="strict-origin-when-cross-origin"></iframe>
+</div>
+
+        </div>
+
+    </section>
+
+
+    <!-- ================= KONTAK ================= -->
+
+    <section class="contact-section">
+    <div class="contact">
+        <h2>Informasi</h2>
+
+        <p class="greeting-text">
+            Terima kasih telah mengunjungi website Rumah Makanan Padang UDA DENAI
+        </p>
+
+        <!-- Tambahan Kontak WhatsApp -->
+        <div class="wa-container">
+            <p>Hubungi kami melalui WhatsApp:</p>
+            <a href="https://wa.me/62881023457900?text=Halo%20Rumah%20Makanan%20Padang%20UDA%20DENAI,%20saya%20ingin%20memesan" target="_blank" class="wa-btn">
+                <!-- Icon WA SVG Sederhana -->
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
+                    <path d="M.057 24l1.687-6.163c-1.041-1.804-1.588-3.849-1.587-5.946.003-6.556 5.338-11.891 11.893-11.891 3.181.001 6.167 1.24 8.413 3.488 2.245 2.248 3.481 5.236 3.48 8.414-.003 6.557-5.338 11.892-11.893 11.892-1.99-.001-3.951-.5-5.688-1.448l-6.305 1.654zm6.597-3.807c1.676.995 3.276 1.591 5.392 1.592 5.448 0 9.886-4.434 9.889-9.885.002-5.462-4.415-9.89-9.881-9.892-5.452 0-9.887 4.434-9.889 9.884-.001 2.225.651 3.891 1.746 5.634l-.999 3.648 3.742-.981zm11.387-5.464c-.074-.124-.272-.198-.57-.347-.297-.149-1.758-.868-2.031-.967-.272-.099-.47-.149-.669.149-.198.297-.768.967-.941 1.165-.173.198-.347.223-.644.074-.297-.149-1.255-.462-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.297-.347.446-.521.151-.172.2-.296.3-.495.099-.198.05-.372-.025-.521-.075-.148-.669-1.611-.916-2.206-.242-.579-.487-.501-.669-.51l-.57-.01c-.198 0-.52.074-.792.372s-1.04 1.016-1.04 2.479 1.065 2.876 1.213 3.074c.149.198 2.095 3.2 5.076 4.487.709.306 1.263.489 1.694.626.712.226 1.36.194 1.872.118.571-.085 1.758-.719 2.006-1.413.248-.695.248-1.29.173-1.414z"/>
+                </svg>
+                <span>0881-0234-57900</span>
+            </a>
+        </div>
+
+        <div class="logo-group">
+            <img src="LOGO UMKM.png" alt="Logo TIM" class="logoutama">
+            <img src="logo65.png" alt="Logo UDA DENAI" class="logoutama">
+        </div>
+    </div>
+</section>
+
+    <!-- ================= TENTANG ================= -->
+
+    <!-- <section id="tentang">
+
+        <div class="section-title">
+
+            <h2>GROW4UMKM</h2>
+
+            <p>
+                Filosofi Logo Tim kami
+            </p>
+
+        </div>
+
+
+        <div class="about">
+
+            <img
+                src="LOGO UMKM.png"
+                alt="Tentang Usaha">
+
+
+            <div class="about-text">
+
+                <h2>GROW4UMKM</h2>
+
+                <p>
+                    <h4>GROW</h4>
+                    Berarti tumbuh atau berkembang. kata ini menggambarkan tujuan kelompok untuk membantu UMKM agar terus berkembang, 
+                    meningkatkan kualitas usaha, dan mampu bersaing.
+                    <h4>Angka 4</h4>
+                    Melambangkan empat anggota kelompok, yaitu: Arka, Rayfa Endriyan, Gisel.
+                    angka 4 juga bisa dimaknai sebagai empat orang yang bekerja sama untuk satu tujuan, yaitu mendukung perkembangan UMKM. <br>
+                    <h4>UMKM</h4>
+                    menunjukkan bahwa fokus utama dari kegiatan kelompok adalah Usaha Mikro, Kecil, dan Menengah.
+                    Kelompok berusaha memberikan dukungan agar usaha lokal dapat lebih dikenal dan berkembang.
+                </p>
+                <p>
+                    <h4>🔴 Filosofi Warna Merah</h4>
+                    Warna Merah dipilih karena melambangkan: <br>
+                    <b>Semangat</b> → menunjukkan semangat kelompok dalam membantu UMKM. <br>
+                    <b>Energi</b> → menggambarkan kelompok yang aktif dalam memberikan ide dan dukungan. <br>
+                    <b>Keberanian</b> → berani menciptakan inovasi dan membantu UMKM menghadapi persaingan. <br>
+                    <b>Kepercayaan diri</b> → memberikan kesan kuat dan mudah dikenali. <br>
+                    Merah juga membuat tulisan GROW4UMKM terlihat lebih tegas dan menonjol, sehingga 
+                    cocok untuk sebuah logo yang ingin menunjukkan energi dan semangat.
+                    <h4>🍴 simbol di dalam huruf O</h4>
+                    Simbol garpu dan sendok di dalam huruf O bisa dimaknai sebagai representasi usaha kuliner/produk makanan, 
+                    sekaligus menggambarkan bahwa UMKM memiliki berbagai jenis usaha yang dekat dengan kehidupan sehari-hari.
+                    <h4>CREATE & SUPPORT</h4>
+                    Tulisan CREATE menggambarkan kreativitas dan inovasi yang dibutuhkan untuk mengembangkan UMKM. <br>
+                    Tulisan SUPPORT berarti dukungan dari kelompok kepada pelaku UMKM. <br>
+                    Sedangkan LOCAL BUSINESS menegaskan bahwa yang didukung adalah usaha lokal
+                </p>
+
+            </div>
+
+        </div>
+
+    </section> -->
+
+    <!-- ================= KERANJANG & TRANSAKSI ================= -->
+
+    <!-- Tombol keranjang mengapung -->
+    <button
+        type="button"
+        class="cart-fab"
+        id="cartFab"
+        onclick="openCart()"
+        aria-label="Buka keranjang pesanan">
+
+        <svg viewBox="0 0 24 24" aria-hidden="true">
+            <path d="M7 18c-1.1 0-1.99.9-1.99 2S5.9 22 7 22s2-.9 2-2-.9-2-2-2zM1 2v2h2l3.6 7.59-1.35 2.45c-.16.28-.25.61-.25.96 0 1.1.9 2 2 2h12v-2H7.42c-.14 0-.25-.11-.25-.25l.03-.12L8.1 13h7.45c.75 0 1.41-.41 1.75-1.03l3.58-6.49A1 1 0 0 0 20 4H5.21l-.94-2H1zm16 16c-1.1 0-1.99.9-1.99 2s.89 2 1.99 2 2-.9 2-2-.9-2-2-2z"/>
+        </svg>
+
+        <span class="cart-fab-label">Keranjang</span>
+
+        <span class="cart-badge" id="cartBadge">0</span>
+
+    </button>
+
+
+    <!-- ================= KERANJANG BELANJA ================= -->
+
+    <div
+        class="cart-overlay"
+        id="cartOverlay"
+        onclick="closeCart(event)">
+
+        <aside
+            class="cart-drawer"
+            role="dialog"
+            aria-modal="true"
+            aria-labelledby="cartTitle"
+            onclick="event.stopPropagation()">
+
+            <div class="cart-header">
+
+                <h2 id="cartTitle">Keranjang Pesanan</h2>
+
+                <button
+                    type="button"
+                    class="icon-close"
+                    onclick="closeCart()"
+                    aria-label="Tutup keranjang">
+
+                    &times;
+
+                </button>
+
+            </div>
+
+            <div class="cart-body" id="cartItems"></div>
+
+            <div class="cart-footer">
+
+                <div class="summary-row">
+                    <span>Subtotal</span>
+                    <strong id="cartSubtotal">Rp0</strong>
+                </div>
+
+                <div class="summary-row total">
+                    <span>Total Pembayaran</span>
+                    <strong id="cartTotal">Rp0</strong>
+                </div>
+
+                <p class="pickup-note">
+                    Pesanan diambil langsung di Warung Uda Denai. Pembayaran dilakukan tunai di kasir.
+                </p>
+
+                <button
+                    type="button"
+                    class="btn-primary btn-block"
+                    onclick="openCheckout()">
+
+                    Lanjut ke Checkout
+
+                </button>
+
+            </div>
+
+        </aside>
+
+    </div>
+
+
+    <!-- ================= CHECKOUT ================= -->
+
+    <div
+        class="ui-modal-overlay"
+        id="checkoutModal"
+        onclick="closeCheckout(event)">
+
+        <div
+            class="ui-modal checkout-modal-box"
+            role="dialog"
+            aria-modal="true"
+            aria-labelledby="checkoutTitle"
+            onclick="event.stopPropagation()">
+
+            <button
+                type="button"
+                class="icon-close"
+                onclick="closeCheckout()"
+                aria-label="Tutup checkout">
+
+                &times;
+
+            </button>
+
+            <div class="modal-heading">
+
+                <h2 id="checkoutTitle">Checkout Pesanan</h2>
+
+                <p>
+                    Lengkapi data berikut, lalu ambil pesanan langsung di warung.
+                </p>
+
+            </div>
+
+            <form
+                id="checkoutForm"
+                class="checkout-form"
+                onsubmit="submitOrder(event)"
+                novalidate>
+
+                <div class="checkout-layout">
+
+                    <div class="checkout-fields">
+
+                        <div class="form-group">
+
+                            <label for="customerName">
+                                Nama Pelanggan <span>*</span>
+                            </label>
+
+                            <input
+                                type="text"
+                                id="customerName"
+                                name="customerName"
+                                placeholder="Masukkan nama lengkap"
+                                maxlength="60"
+                                autocomplete="name">
+
+                            <small class="field-error" id="errorCustomerName"></small>
+
+                        </div>
+
+                        <div class="form-group">
+
+                            <label for="customerNotes">
+                                Catatan Tambahan <small>(opsional)</small>
+                            </label>
+
+                            <textarea
+                                id="customerNotes"
+                                name="customerNotes"
+                                rows="3"
+                                maxlength="250"
+                                placeholder="Contoh: nasi tanpa sayur, sambal dipisah, dll."></textarea>
+
+                        </div>
+
+                        <div class="payment-block">
+
+                            <h3>Metode Pembayaran</h3>
+
+                            <div class="payment-cash">
+
+                                <span class="payment-cash-icon">Rp</span>
+
+                                <div>
+                                    <strong>CASH (Tunai)</strong>
+                                    <small>Dibayar langsung di kasir Warung Uda Denai.</small>
+                                </div>
+
+                                <span class="payment-check">&#10003;</span>
+
+                            </div>
+
+                            <p class="payment-info">
+                                Hanya tersedia pembayaran tunai. Tidak ada pembayaran online, QRIS, transfer, atau e-wallet.
+                            </p>
+
+                        </div>
+
+                        <div class="pickup-block">
+
+                            <h3>Pengambilan Pesanan</h3>
+
+                            <p>
+                                Pesanan <strong>wajib diambil sendiri</strong> di Warung Uda Denai.
+                                Tidak ada layanan pengantaran.
+                            </p>
+
+                            <p class="address-small">
+                                Jl. Pancawarga III RT.1 RW.3, Cipinang Besar Sel.,
+                                Jatinegara, Jakarta Timur.
+                            </p>
+
+                        </div>
+
+                    </div>
+
+                    <aside class="checkout-summary">
+
+                        <h3>Ringkasan Pesanan</h3>
+
+                        <div
+                            class="checkout-summary-items"
+                            id="checkoutSummaryItems">
+                        </div>
+
+                        <div class="summary-row">
+                            <span>Subtotal</span>
+                            <strong id="checkoutSubtotal">Rp0</strong>
+                        </div>
+
+                        <div class="summary-row total">
+                            <span>Total</span>
+                            <strong id="checkoutTotal">Rp0</strong>
+                        </div>
+
+                        <button
+                            type="submit"
+                            class="btn-primary btn-block">
+
+                            Pesan Sekarang
+
+                        </button>
+
+                        <button
+                            type="button"
+                            class="btn-ghost btn-block"
+                            onclick="backToCart()">
+
+                            Kembali ke Keranjang
+
+                        </button>
+
+                    </aside>
+
+                </div>
+
+            </form>
+
+        </div>
+
+    </div>
+
+
+    <!-- ================= KONFIRMASI TRANSAKSI ================= -->
+
+    <div
+        class="ui-modal-overlay"
+        id="confirmationModal"
+        onclick="closeConfirmation(event)">
+
+        <div
+            class="ui-modal confirmation-box"
+            role="dialog"
+            aria-modal="true"
+            aria-labelledby="confirmationTitle"
+            onclick="event.stopPropagation()">
+
+            <div id="confirmationContent"></div>
+
+        </div>
+
+    </div>
+
+
+    <!-- ================= DASHBOARD ADMIN ================= -->
+
+    <div
+        class="ui-modal-overlay admin-overlay"
+        id="adminModal"
+        onclick="closeAdmin(event)">
+
+        <div
+            class="ui-modal admin-box"
+            role="dialog"
+            aria-modal="true"
+            aria-labelledby="adminTitle"
+            onclick="event.stopPropagation()">
+
+            <button
+                type="button"
+                class="icon-close"
+                onclick="closeAdmin()"
+                aria-label="Tutup riwayat pesanan">
+
+                &times;
+
+            </button>
+
+            <div class="modal-heading admin-heading">
+
+                <div>
+
+                    <h2 id="adminTitle">Riwayat Pesanan</h2>
+
+                    <p>
+                        Lihat pesanan masuk dan riwayat transaksi Warung Uda Denai.
+                    </p>
+
+                </div>
+
+                <span class="admin-tag">Cash Only</span>
+
+            </div>
+
+            <div class="admin-stats" id="adminStats"></div>
+
+            <div class="admin-tabs" role="tablist">
+
+                <button
+                    type="button"
+                    class="admin-tab active"
+                    id="tabIncoming"
+                    onclick="switchAdminTab('incoming')">
+
+                    Pesanan Masuk
+                    <span class="tab-count" id="incomingCount">0</span>
+
+                </button>
+
+                <button
+                    type="button"
+                    class="admin-tab"
+                    id="tabHistory"
+                    onclick="switchAdminTab('history')">
+
+                    Riwayat Transaksi
+                    <span class="tab-count" id="historyCount">0</span>
+
+                </button>
+
+            </div>
+
+            <div class="admin-panel" id="adminIncoming"></div>
+
+            <div class="admin-panel" id="adminHistory" hidden></div>
+
+        </div>
+
+    </div>
+
+
+    <!-- Notifikasi kecil -->
+    <div
+        class="toast-container"
+        id="toastContainer"
+        aria-live="polite">
+    </div>
+
+
+    <!-- ================= FOOTER ================= -->
+
+    <footer>
+
+        <p>
+            © 2026 Uda Denai. Semua Hak Dilindungi.
+        </p>
+
+    </footer>
+
+
+    <script>
+        function toggleMenu() {
+            const menu = document.getElementById("navMenu");
+            menu.classList.toggle("active");
+        }
+
+        document.querySelectorAll("#navMenu a").forEach(function(link) {
+            link.addEventListener("click", function() {
+                document.getElementById("navMenu").classList.remove("active");
+            });
+        });
+    </script>
+
+    <script src="script.js"></script>
+
+</body>
+
+</html>
