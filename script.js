@@ -222,14 +222,7 @@ const PRODUCTS = [
 const CART_KEY = "udadenai_cart_v1";
 const ORDERS_KEY = "udadenai_orders_v1";
 const SEQUENCE_KEY = "udadenai_order_sequence_v1";
-
-/* Akun admin lokal.
-   GANTI username dan password di bawah ini jika perlu.
-   Catatan: karena situs ini statis, login ini hanya pembatas akses
-   di sisi browser, bukan keamanan server. */
-const ADMIN_SESSION_KEY = "udadenai_admin_session_v1";
-const ADMIN_USERNAME = "admin";
-const ADMIN_PASSWORD = "udadenai2026";
+const CLOUD_MIGRATION_KEY = "udadenai_cloud_migration_v1";
 
 /* Nomor WhatsApp Warung Uda Denai (format internasional tanpa +).
    Ganti angka ini jika nomor warung berubah. */
@@ -254,7 +247,12 @@ let orders = normalizeOrders(readStorage(ORDERS_KEY, []));
 let currentDetailProduct = null;
 let activeAdminTab = "incoming";
 let pendingAdminTab = "incoming";
-let adminSessionActive = false;
+let pendingAdminAccess = false;
+let currentAdminUser = null;
+let adminAuthResolved = false;
+let cloudOrdersUnsubscribe = null;
+let cloudOrdersActive = false;
+let isSubmittingOrder = false;
 
 
 /* =====================================
@@ -959,9 +957,13 @@ function createOrderNumber() {
     return number;
 }
 
-function submitOrder(event) {
+async function submitOrder(event) {
 
     event.preventDefault();
+
+    if (isSubmittingOrder) {
+        return;
+    }
 
     if (!validateCheckout()) {
         return;
@@ -982,57 +984,145 @@ function submitOrder(event) {
     const name = nameInput.value.trim();
     const notes = notesInput ? notesInput.value.trim() : "";
 
-    const order = {
-        id: createOrderNumber(),
-        createdAt: new Date().toISOString(),
-        customer: {
-            name: name,
-            notes: notes
-        },
-        items: details.map(function(item) {
-            return {
-                id: item.id,
-                name: item.name,
-                price: item.price,
-                qty: item.qty,
-                subtotal: item.subtotal
-            };
-        }),
-        total: details.reduce(function(sum, item) {
-            return sum + item.subtotal;
-        }, 0),
-        paymentMethod: "Cash di Tempat",
-        fulfillment: "Ambil di Warung",
-        status: "Menunggu"
-    };
+    isSubmittingOrder = true;
 
-    orders.unshift(order);
-    writeStorage(ORDERS_KEY, orders);
+    const submitButton = document.getElementById("checkoutSubmitBtn");
+    const originalButtonText = submitButton
+        ? submitButton.textContent.trim()
+        : "Pesan Sekarang";
 
-    cart = [];
-    writeStorage(CART_KEY, cart);
-    updateCartUI();
-
-    const form = document.getElementById("checkoutForm");
-
-    if (form) {
-        form.reset();
+    if (submitButton) {
+        submitButton.disabled = true;
+        submitButton.textContent = "Memproses...";
     }
 
-    clearCheckoutErrors();
+    /* Buka tab WhatsApp lebih awal agar tetap diizinkan browser
+       meskipun proses penyimpanan ke Firebase membutuhkan waktu. */
+    let whatsappWindow = null;
+    let orderCreated = false;
 
-    closeCheckout();
-    showConfirmation(order);
-    showToast("Pesanan berhasil dibuat.");
+    try {
+        whatsappWindow = window.open("", "_blank");
 
-    /* Langsung buka WhatsApp dengan draft pesanan.
-       Jika browser memblokir pop-up, tombol di halaman konfirmasi
-       tetap bisa digunakan. */
-    window.open(
-        buildWhatsAppOrderLink(order),
-        "_blank",
-        "noopener,noreferrer"
-    );
+        if (whatsappWindow) {
+            whatsappWindow.opener = null;
+        }
+    } catch (error) {
+        whatsappWindow = null;
+    }
+
+    try {
+
+        let orderNumber = "";
+
+        if (isFirebaseReady()) {
+
+            try {
+                orderNumber = await createCloudOrderNumber();
+            } catch (cloudError) {
+
+                console.warn(
+                    "Nomor pesanan cloud gagal dibuat, memakai nomor lokal.",
+                    cloudError
+                );
+
+                orderNumber = createOrderNumber();
+            }
+
+        } else {
+
+            orderNumber = createOrderNumber();
+        }
+
+        const order = {
+            id: orderNumber,
+            createdAt: new Date().toISOString(),
+            customer: {
+                name: name,
+                notes: notes
+            },
+            items: details.map(function(item) {
+                return {
+                    id: item.id,
+                    name: item.name,
+                    price: item.price,
+                    qty: item.qty,
+                    subtotal: item.subtotal
+                };
+            }),
+            total: details.reduce(function(sum, item) {
+                return sum + item.subtotal;
+            }, 0),
+            paymentMethod: "Cash di Tempat",
+            fulfillment: "Ambil di Warung",
+            status: "Menunggu"
+        };
+
+        orders.unshift(order);
+        writeStorage(ORDERS_KEY, orders);
+        orderCreated = true;
+
+        if (isFirebaseReady()) {
+
+            createCloudOrder(order).catch(function(error) {
+
+                console.error(
+                    "Gagal menyimpan pesanan ke Firebase:",
+                    error
+                );
+
+                showToast(
+                    "Pesanan tersimpan, tetapi belum tersinkron ke Firebase."
+                );
+            });
+        }
+
+        cart = [];
+        writeStorage(CART_KEY, cart);
+        updateCartUI();
+
+        const form = document.getElementById("checkoutForm");
+
+        if (form) {
+            form.reset();
+        }
+
+        clearCheckoutErrors();
+
+        closeCheckout();
+        showConfirmation(order);
+        showToast("Pesanan berhasil dibuat.");
+
+        const whatsappLink = buildWhatsAppOrderLink(order);
+
+        if (whatsappWindow && !whatsappWindow.closed) {
+            whatsappWindow.location.href = whatsappLink;
+        } else {
+            window.open(
+                whatsappLink,
+                "_blank",
+                "noopener,noreferrer"
+            );
+        }
+
+    } catch (error) {
+
+        console.error("Gagal membuat pesanan:", error);
+        showToast("Pesanan gagal diproses. Silakan coba lagi.");
+
+    } finally {
+
+        if (!orderCreated && whatsappWindow && !whatsappWindow.closed) {
+            whatsappWindow.close();
+        }
+
+        isSubmittingOrder = false;
+
+        if (submitButton) {
+            submitButton.disabled = false;
+            submitButton.textContent = originalButtonText;
+        }
+    }
 }
 
 
@@ -1585,16 +1675,92 @@ function renderAdmin() {
 }
 
 function isAdminAuthenticated() {
+    return Boolean(currentAdminUser);
+}
 
-    if (adminSessionActive) {
-        return true;
+function startCloudOrders() {
+
+    if (cloudOrdersActive || !isFirebaseReady()) {
+        return;
     }
 
-    try {
-        return sessionStorage.getItem(ADMIN_SESSION_KEY) === "1";
-    } catch (error) {
-        return false;
+    cloudOrdersActive = true;
+
+    cloudOrdersUnsubscribe = watchCloudOrders(
+        function(list) {
+
+            orders = normalizeOrders(list);
+            writeStorage(ORDERS_KEY, orders);
+
+            const adminModal = document.getElementById("adminModal");
+
+            if (adminModal && adminModal.classList.contains("open")) {
+                renderAdmin();
+            }
+        },
+        function(error) {
+
+            cloudOrdersActive = false;
+
+            if (cloudOrdersUnsubscribe) {
+                cloudOrdersUnsubscribe();
+                cloudOrdersUnsubscribe = null;
+            }
+
+            console.error("Gagal memuat pesanan dari Firebase:", error);
+
+            showToast(
+                "Gagal memuat pesanan dari Firebase: " +
+                cloudErrorMessage(error)
+            );
+        }
+    );
+}
+
+function stopCloudOrders() {
+
+    if (cloudOrdersUnsubscribe) {
+        cloudOrdersUnsubscribe();
+        cloudOrdersUnsubscribe = null;
     }
+
+    cloudOrdersActive = false;
+}
+
+function initAdminAuth() {
+
+    if (!isFirebaseReady()) {
+        console.warn("Firebase:", getFirebaseInitError());
+        return;
+    }
+
+    onCloudAuthState(function(user) {
+
+        currentAdminUser = user || null;
+        adminAuthResolved = true;
+
+        if (currentAdminUser) {
+
+            startCloudOrders();
+
+            if (pendingAdminAccess) {
+
+                pendingAdminAccess = false;
+                closeAdminLogin();
+                openAdminDashboard(pendingAdminTab);
+            }
+
+        } else {
+
+            stopCloudOrders();
+
+            const adminModal = document.getElementById("adminModal");
+
+            if (adminModal && adminModal.classList.contains("open")) {
+                closeAdmin();
+            }
+        }
+    });
 }
 
 function requestAdmin(tab) {
@@ -1603,15 +1769,20 @@ function requestAdmin(tab) {
         ? "history"
         : "incoming";
 
-    if (!isAdminAuthenticated()) {
+    pendingAdminTab = targetTab;
 
-        pendingAdminTab = targetTab;
-        openAdminLogin();
-
+    if (isAdminAuthenticated()) {
+        openAdminDashboard(targetTab);
         return;
     }
 
-    openAdminDashboard(targetTab);
+    if (!isFirebaseReady()) {
+        showToast(getFirebaseInitError() || "Firebase belum siap.");
+        return;
+    }
+
+    pendingAdminAccess = true;
+    openAdminLogin();
 }
 
 function openAdminLogin() {
@@ -1636,12 +1807,12 @@ function openAdminLogin() {
     modal.classList.add("open");
     syncBodyLock();
 
-    const username = document.getElementById("adminUsername");
+    const email = document.getElementById("adminEmail");
 
     window.setTimeout(function() {
 
-        if (username && !username.value) {
-            username.focus();
+        if (email && !email.value) {
+            email.focus();
         } else if (password) {
             password.focus();
         }
@@ -1671,58 +1842,104 @@ function closeAdminLogin(event) {
             password.value = "";
         }
 
+        pendingAdminAccess = false;
         syncBodyLock();
     }
 }
 
-function submitAdminLogin(event) {
+function setAdminLoginLoading(isLoading) {
+
+    const button = document.getElementById("adminLoginSubmit");
+
+    if (!button) {
+        return;
+    }
+
+    button.disabled = isLoading;
+    button.textContent = isLoading ? "Memeriksa..." : "Masuk";
+}
+
+async function submitAdminLogin(event) {
 
     event.preventDefault();
 
-    const usernameInput = document.getElementById("adminUsername");
+    const emailInput = document.getElementById("adminEmail");
     const passwordInput = document.getElementById("adminPassword");
-    const error = document.getElementById("adminLoginError");
+    const loginError = document.getElementById("adminLoginError");
 
-    const username = usernameInput ? usernameInput.value.trim() : "";
+    const email = emailInput ? emailInput.value.trim() : "";
     const password = passwordInput ? passwordInput.value : "";
 
-    if (username === ADMIN_USERNAME && password === ADMIN_PASSWORD) {
+    if (!email || !password) {
 
-        adminSessionActive = true;
-
-        try {
-            sessionStorage.setItem(ADMIN_SESSION_KEY, "1");
-        } catch (error) {
-            /* sessionStorage bisa diblokir; sesi tetap aktif di halaman ini. */
+        if (loginError) {
+            loginError.textContent = "Email dan password wajib diisi.";
         }
+
+        return;
+    }
+
+    if (!isFirebaseReady()) {
+
+        if (loginError) {
+            loginError.textContent =
+                getFirebaseInitError() || "Firebase belum siap.";
+        }
+
+        return;
+    }
+
+    if (loginError) {
+        loginError.textContent = "";
+    }
+
+    setAdminLoginLoading(true);
+
+    try {
+
+        const credential = await cloudSignIn(email, password);
+
+        currentAdminUser = credential && credential.user
+            ? credential.user
+            : getCloudCurrentUser();
+
+        adminAuthResolved = true;
+
+        startCloudOrders();
+
+        pendingAdminAccess = false;
 
         closeAdminLogin();
         openAdminDashboard(pendingAdminTab);
         showToast("Login admin berhasil.");
 
-        return;
-    }
+    } catch (error) {
 
-    if (error) {
-        error.textContent = "Username atau password salah.";
-    }
+        if (loginError) {
+            loginError.textContent = cloudErrorMessage(error);
+        }
 
-    if (passwordInput) {
-        passwordInput.value = "";
-        passwordInput.focus();
+        if (passwordInput) {
+            passwordInput.value = "";
+            passwordInput.focus();
+        }
+
+    } finally {
+
+        setAdminLoginLoading(false);
     }
 }
 
-function logoutAdmin() {
-
-    adminSessionActive = false;
+async function logoutAdmin() {
 
     try {
-        sessionStorage.removeItem(ADMIN_SESSION_KEY);
+        await cloudSignOut();
     } catch (error) {
-        /* Abaikan jika sessionStorage tidak tersedia. */
+        console.error("Gagal logout dari Firebase:", error);
     }
 
+    currentAdminUser = null;
+    stopCloudOrders();
     closeAdmin();
     showToast("Anda telah keluar dari admin.");
 }
@@ -1748,6 +1965,7 @@ function openAdminDashboard(tab) {
 
     modal.classList.add("open");
     renderAdmin();
+    startCloudOrders();
     syncBodyLock();
 }
 
@@ -1789,6 +2007,9 @@ function updateOrderStatus(orderId, status) {
         return;
     }
 
+    const previousStatus = order.status;
+    const previousUpdatedAt = order.updatedAt;
+
     order.status = status;
     order.updatedAt = new Date().toISOString();
 
@@ -1796,6 +2017,38 @@ function updateOrderStatus(orderId, status) {
     renderAdmin();
 
     showToast("Status " + orderId + " diubah menjadi " + status + ".");
+
+    if (isFirebaseReady() && currentAdminUser) {
+
+        updateCloudOrderStatus(
+            orderId,
+            status,
+            order.updatedAt
+        ).catch(function(error) {
+
+            console.error(
+                "Gagal menyimpan status ke Firebase:",
+                error
+            );
+
+            const currentOrder = orders.find(function(entry) {
+                return entry.id === orderId;
+            });
+
+            if (currentOrder) {
+                currentOrder.status = previousStatus;
+                currentOrder.updatedAt = previousUpdatedAt;
+            }
+
+            writeStorage(ORDERS_KEY, orders);
+            renderAdmin();
+
+            showToast(
+                "Gagal menyimpan status ke Firebase: " +
+                cloudErrorMessage(error)
+            );
+        });
+    }
 }
 
 function toggleHistoryDetail(orderId) {
@@ -1899,6 +2152,58 @@ function initCheckoutFieldListeners() {
     }
 }
 
+async function migrateLocalOrdersToCloud() {
+
+    if (!isFirebaseReady()) {
+        return;
+    }
+
+    if (readStorage(CLOUD_MIGRATION_KEY, false)) {
+        return;
+    }
+
+    if (!orders.length) {
+
+        writeStorage(CLOUD_MIGRATION_KEY, true);
+        return;
+    }
+
+    const results = await Promise.all(
+        orders.map(function(order) {
+
+            return createCloudOrder(order)
+                .then(function() {
+                    return { ok: true, code: "" };
+                })
+                .catch(function(error) {
+
+                    console.warn(
+                        "Migrasi pesanan lokal dilewati:",
+                        order.id,
+                        error
+                    );
+
+                    return {
+                        ok: false,
+                        code: error && error.code ? error.code : ""
+                    };
+                });
+        })
+    );
+
+    const allUploaded = results.every(function(result) {
+        return result.ok;
+    });
+
+    const allAlreadyExist = results.every(function(result) {
+        return !result.ok && result.code === "permission-denied";
+    });
+
+    if (allUploaded || allAlreadyExist) {
+        writeStorage(CLOUD_MIGRATION_KEY, true);
+    }
+}
+
 function handleAdminAccessLink() {
 
     const params = new URLSearchParams(window.location.search);
@@ -1919,6 +2224,8 @@ function initTransactionFeatures() {
     initProductButtons();
     initCheckoutFieldListeners();
     updateCartUI();
+    initAdminAuth();
+    migrateLocalOrdersToCloud();
     handleAdminAccessLink();
 }
 

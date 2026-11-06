@@ -2393,6 +2393,13 @@ footer {
     margin-bottom: 10px;
 }
 
+.admin-login-hint {
+    margin: -2px 0 14px;
+    color: var(--muted);
+    font-size: 12px;
+    line-height: 1.4;
+}
+
 .admin-stats {
     display: grid;
     grid-template-columns: repeat(4, 1fr);

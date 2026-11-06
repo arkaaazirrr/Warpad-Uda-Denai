@@ -1,0 +1,6 @@
+.vercel
+.env*
+firebase-debug.log
+.firebase/
+serviceAccount*.json
+*.private.key

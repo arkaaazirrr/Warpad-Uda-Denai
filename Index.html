@@ -1363,7 +1363,8 @@
 
                         <button
                             type="submit"
-                            class="btn-primary btn-block">
+                            class="btn-primary btn-block"
+                            id="checkoutSubmitBtn">
 
                             Pesan Sekarang
 
@@ -1454,15 +1455,15 @@
 
                 <div class="form-group">
 
-                    <label for="adminUsername">Username</label>
+                    <label for="adminEmail">Email Admin</label>
 
                     <input
-                        type="text"
-                        id="adminUsername"
-                        name="adminUsername"
-                        maxlength="40"
+                        type="email"
+                        id="adminEmail"
+                        name="adminEmail"
+                        maxlength="120"
                         autocomplete="username"
-                        placeholder="Masukkan username admin">
+                        placeholder="admin@email.com">
 
                 </div>
 
@@ -1482,8 +1483,17 @@
 
                 <small class="field-error" id="adminLoginError" role="alert"></small>
 
-                <button type="submit" class="btn-primary btn-block">
+                <p class="admin-login-hint">
+                    Gunakan akun admin yang terdaftar di Firebase.
+                </p>
+
+                <button
+                    type="submit"
+                    class="btn-primary btn-block"
+                    id="adminLoginSubmit">
+
                     Masuk
+
                 </button>
 
             </form>
@@ -1615,7 +1625,11 @@
         });
     </script>
 
-    <script src="script.js"></script>
+    <script defer src="https://www.gstatic.com/firebasejs/13.2.0/firebase-app-compat.js"></script>
+    <script defer src="https://www.gstatic.com/firebasejs/13.2.0/firebase-auth-compat.js"></script>
+    <script defer src="https://www.gstatic.com/firebasejs/13.2.0/firebase-firestore-compat.js"></script>
+    <script defer src="firebase-cloud.js"></script>
+    <script defer src="script.js"></script>
 
     <!-- Vercel Web Analytics -->
     <script>
