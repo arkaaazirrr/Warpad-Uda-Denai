@@ -154,6 +154,21 @@ function createCloudOrderNumber() {
     });
 }
 
+function getCloudOrderSequence() {
+
+    if (!firebaseReady) {
+        return Promise.resolve({ date: "", count: 0 });
+    }
+
+    return firebaseDb
+        .collection("meta")
+        .doc("orderSequence")
+        .get()
+        .then(function(snapshot) {
+            return snapshot.exists ? (snapshot.data() || {}) : { date: "", count: 0 };
+        });
+}
+
 function watchCloudOrders(callback, onError) {
 
     if (!firebaseReady) {

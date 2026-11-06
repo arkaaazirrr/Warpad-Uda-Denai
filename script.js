@@ -2152,6 +2152,61 @@ function initCheckoutFieldListeners() {
     }
 }
 
+function getTodayDateKey() {
+
+    const now = new Date();
+
+    return now.getFullYear() +
+        String(now.getMonth() + 1).padStart(2, "0") +
+        String(now.getDate()).padStart(2, "0");
+}
+
+function getLocalOrderSequenceMaxForToday() {
+
+    const dateKey = getTodayDateKey();
+
+    return orders.reduce(function(max, order) {
+
+        const match = /^UDD-([0-9]{8})-([0-9]{4})$/.exec(order.id || "");
+
+        if (match && match[1] === dateKey) {
+            return Math.max(max, parseInt(match[2], 10) || 0);
+        }
+
+        return max;
+    }, 0);
+}
+
+async function alignCloudOrderSequence() {
+
+    const maxSequence = getLocalOrderSequenceMaxForToday();
+
+    if (!maxSequence || typeof getCloudOrderSequence !== "function") {
+        return;
+    }
+
+    try {
+
+        const sequence = await getCloudOrderSequence();
+        const dateKey = getTodayDateKey();
+        const currentCount =
+            sequence.date === dateKey
+                ? (Number(sequence.count) || 0)
+                : 0;
+
+        for (let count = currentCount; count < maxSequence; count++) {
+            await createCloudOrderNumber();
+        }
+
+    } catch (error) {
+
+        console.warn(
+            "Gagal menyelaraskan nomor pesanan cloud:",
+            error
+        );
+    }
+}
+
 async function migrateLocalOrdersToCloud() {
 
     if (!isFirebaseReady()) {
@@ -2167,6 +2222,10 @@ async function migrateLocalOrdersToCloud() {
         writeStorage(CLOUD_MIGRATION_KEY, true);
         return;
     }
+
+    /* Selaraskan counter cloud dengan nomor pesanan lokal hari ini
+       supaya pesanan baru tidak bertabrakan dengan pesanan lama. */
+    await alignCloudOrderSequence();
 
     const results = await Promise.all(
         orders.map(function(order) {
