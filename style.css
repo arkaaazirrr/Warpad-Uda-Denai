@@ -2349,6 +2349,50 @@ footer {
     white-space: nowrap;
 }
 
+.admin-nav-item[hidden] {
+    display: none !important;
+}
+
+.admin-heading-actions {
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    gap: 8px;
+    flex-wrap: wrap;
+}
+
+.admin-logout {
+    padding: 7px 12px;
+
+    border: 1px solid var(--line);
+    border-radius: 999px;
+
+    background: white;
+    color: var(--muted);
+
+    font-size: 11px;
+    font-weight: 700;
+    cursor: pointer;
+
+    transition: 0.2s ease;
+}
+
+.admin-logout:hover {
+    border-color: #f3c99f;
+    background: var(--primary-soft);
+    color: var(--primary-dark);
+}
+
+.admin-login-box {
+    max-width: 430px;
+}
+
+.admin-login-box #adminLoginError {
+    display: block;
+    min-height: 18px;
+    margin-bottom: 10px;
+}
+
 .admin-stats {
     display: grid;
     grid-template-columns: repeat(4, 1fr);
@@ -2935,14 +2979,38 @@ footer {
    RESPONSIF TRANSAKSI
 ========================= */
 
-@media (min-width: 901px) and (max-width: 1080px) {
+@media (min-width: 901px) and (max-width: 1280px) {
+
+    .logo {
+        gap: 8px;
+        font-size: 16px;
+    }
+
+    .logo img {
+        width: 58px;
+    }
 
     nav ul {
         gap: 12px;
     }
 
     nav ul li a {
-        font-size: 14px;
+        font-size: 13.5px;
+    }
+}
+
+@media (min-width: 901px) and (max-width: 1024px) {
+
+    .logo span {
+        display: none;
+    }
+
+    nav ul {
+        gap: 10px;
+    }
+
+    nav ul li a {
+        font-size: 13px;
     }
 }
 

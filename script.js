@@ -223,6 +223,14 @@ const CART_KEY = "udadenai_cart_v1";
 const ORDERS_KEY = "udadenai_orders_v1";
 const SEQUENCE_KEY = "udadenai_order_sequence_v1";
 
+/* Akun admin lokal.
+   GANTI username dan password di bawah ini jika perlu.
+   Catatan: karena situs ini statis, login ini hanya pembatas akses
+   di sisi browser, bukan keamanan server. */
+const ADMIN_SESSION_KEY = "udadenai_admin_session_v1";
+const ADMIN_USERNAME = "admin";
+const ADMIN_PASSWORD = "udadenai2026";
+
 /* Nomor WhatsApp Warung Uda Denai (format internasional tanpa +).
    Ganti angka ini jika nomor warung berubah. */
 const WHATSAPP_WARUNG = "6285880819798";
@@ -245,6 +253,8 @@ let cart = normalizeCart(readStorage(CART_KEY, []));
 let orders = normalizeOrders(readStorage(ORDERS_KEY, []));
 let currentDetailProduct = null;
 let activeAdminTab = "incoming";
+let pendingAdminTab = "incoming";
+let adminSessionActive = false;
 
 
 /* =====================================
@@ -435,6 +445,7 @@ function syncBodyLock() {
         "cartOverlay",
         "checkoutModal",
         "confirmationModal",
+        "adminLoginModal",
         "adminModal"
     ];
 
@@ -1190,15 +1201,6 @@ function showConfirmation(order) {
             <button
                 type="button"
                 class="btn-primary"
-                onclick="closeConfirmation(); openAdmin('history');">
-
-                Lihat Riwayat Transaksi
-
-            </button>
-
-            <button
-                type="button"
-                class="btn-ghost"
                 onclick="closeConfirmation()">
 
                 Selesai
@@ -1582,7 +1584,155 @@ function renderAdmin() {
     }
 }
 
-function openAdmin(tab) {
+function isAdminAuthenticated() {
+
+    if (adminSessionActive) {
+        return true;
+    }
+
+    try {
+        return sessionStorage.getItem(ADMIN_SESSION_KEY) === "1";
+    } catch (error) {
+        return false;
+    }
+}
+
+function requestAdmin(tab) {
+
+    const targetTab = tab === "history"
+        ? "history"
+        : "incoming";
+
+    if (!isAdminAuthenticated()) {
+
+        pendingAdminTab = targetTab;
+        openAdminLogin();
+
+        return;
+    }
+
+    openAdminDashboard(targetTab);
+}
+
+function openAdminLogin() {
+
+    const modal = document.getElementById("adminLoginModal");
+
+    if (!modal) {
+        return;
+    }
+
+    const error = document.getElementById("adminLoginError");
+    const password = document.getElementById("adminPassword");
+
+    if (error) {
+        error.textContent = "";
+    }
+
+    if (password) {
+        password.value = "";
+    }
+
+    modal.classList.add("open");
+    syncBodyLock();
+
+    const username = document.getElementById("adminUsername");
+
+    window.setTimeout(function() {
+
+        if (username && !username.value) {
+            username.focus();
+        } else if (password) {
+            password.focus();
+        }
+    }, 50);
+}
+
+function closeAdminLogin(event) {
+
+    const modal = document.getElementById("adminLoginModal");
+
+    if (!modal) {
+        return;
+    }
+
+    if (!event || event.target === modal) {
+
+        modal.classList.remove("open");
+
+        const error = document.getElementById("adminLoginError");
+        const password = document.getElementById("adminPassword");
+
+        if (error) {
+            error.textContent = "";
+        }
+
+        if (password) {
+            password.value = "";
+        }
+
+        syncBodyLock();
+    }
+}
+
+function submitAdminLogin(event) {
+
+    event.preventDefault();
+
+    const usernameInput = document.getElementById("adminUsername");
+    const passwordInput = document.getElementById("adminPassword");
+    const error = document.getElementById("adminLoginError");
+
+    const username = usernameInput ? usernameInput.value.trim() : "";
+    const password = passwordInput ? passwordInput.value : "";
+
+    if (username === ADMIN_USERNAME && password === ADMIN_PASSWORD) {
+
+        adminSessionActive = true;
+
+        try {
+            sessionStorage.setItem(ADMIN_SESSION_KEY, "1");
+        } catch (error) {
+            /* sessionStorage bisa diblokir; sesi tetap aktif di halaman ini. */
+        }
+
+        closeAdminLogin();
+        openAdminDashboard(pendingAdminTab);
+        showToast("Login admin berhasil.");
+
+        return;
+    }
+
+    if (error) {
+        error.textContent = "Username atau password salah.";
+    }
+
+    if (passwordInput) {
+        passwordInput.value = "";
+        passwordInput.focus();
+    }
+}
+
+function logoutAdmin() {
+
+    adminSessionActive = false;
+
+    try {
+        sessionStorage.removeItem(ADMIN_SESSION_KEY);
+    } catch (error) {
+        /* Abaikan jika sessionStorage tidak tersedia. */
+    }
+
+    closeAdmin();
+    showToast("Anda telah keluar dari admin.");
+}
+
+function openAdminDashboard(tab) {
+
+    if (!isAdminAuthenticated()) {
+        requestAdmin(tab);
+        return;
+    }
 
     orders = normalizeOrders(readStorage(ORDERS_KEY, orders));
 
@@ -1749,6 +1899,18 @@ function initCheckoutFieldListeners() {
     }
 }
 
+function handleAdminAccessLink() {
+
+    const params = new URLSearchParams(window.location.search);
+
+    if (
+        window.location.hash === "#admin" ||
+        params.get("admin") === "1"
+    ) {
+        requestAdmin();
+    }
+}
+
 function initTransactionFeatures() {
 
     cart = normalizeCart(cart);
@@ -1757,6 +1919,7 @@ function initTransactionFeatures() {
     initProductButtons();
     initCheckoutFieldListeners();
     updateCartUI();
+    handleAdminAccessLink();
 }
 
 if (document.readyState === "loading") {
@@ -1776,6 +1939,15 @@ if (document.readyState === "loading") {
 document.addEventListener("keydown", function(event) {
 
     if (event.key !== "Escape") {
+        return;
+    }
+
+    const adminLogin = document.getElementById("adminLoginModal");
+
+    if (adminLogin && adminLogin.classList.contains("open")) {
+
+        closeAdminLogin();
+
         return;
     }
 
@@ -1818,6 +1990,8 @@ document.addEventListener("keydown", function(event) {
 /* =====================================
    SINKRONISASI ANTAR TAB
 ===================================== */
+
+window.addEventListener("hashchange", handleAdminAccessLink);
 
 window.addEventListener("storage", function(event) {
 
